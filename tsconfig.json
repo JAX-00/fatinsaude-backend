@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2023",
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "lib": ["ES2023"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "incremental": true,
+    "noImplicitAny": false,
+    "strict": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+}
