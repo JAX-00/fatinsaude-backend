@@ -23,7 +23,7 @@ model Hospital {
   longitude     Float
   phone         String?
   emergency     Boolean @default(false)
-  ambulance     Boolean @default(false)
+  ambulance     String?
   diseases      Json?
   operationTime String?
   type          HospitalType?

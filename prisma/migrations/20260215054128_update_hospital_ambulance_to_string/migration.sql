@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Hospital" ALTER COLUMN "ambulance" DROP NOT NULL,
+ALTER COLUMN "ambulance" DROP DEFAULT,
+ALTER COLUMN "ambulance" SET DATA TYPE TEXT;
