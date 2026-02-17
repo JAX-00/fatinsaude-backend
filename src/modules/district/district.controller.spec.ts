@@ -9,13 +9,17 @@ describe('DistrictController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DistrictController],
-      // Di sini kuncinya! Controller butuh Service dan Prisma
       providers: [
         DistrictService,
         {
           provide: PrismaService,
-          useValue: { district: { findMany: jest.fn() } }
-        }
+          useValue: {
+            district: {
+              findMany: jest.fn(),
+              create: jest.fn(), // <--- Pakai yang ini supaya lebih lengkap
+            },
+          },
+        },
       ],
     }).compile();
 
