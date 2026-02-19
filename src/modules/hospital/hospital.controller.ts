@@ -5,6 +5,7 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { HospitalService } from './hospital.service';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
@@ -13,14 +14,16 @@ import { CreateHospitalDto } from './dto/create-hospital.dto';
 export class HospitalController {
   constructor(private readonly hospitalService: HospitalService) {}
 
-  @Get()
-  findAll() {
-    return this.hospitalService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.hospitalService.findOne(id);
+  }
+
+  @Get()
+  findAll(@Query('districtId') districtId?: string) {
+    return this.hospitalService.findAll(
+      districtId ? Number(districtId) : undefined,
+    );
   }
 
   @Post()

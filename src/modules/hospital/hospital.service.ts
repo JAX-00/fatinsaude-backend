@@ -24,8 +24,9 @@ export class HospitalService {
     });
   }
 
-  async findAll() {
+  async findAll(districtId?: number) {
     return this.prisma.hospital.findMany({
+      where: districtId ? {districtId} : undefined,
       include: {
         district: true,
       },
@@ -45,4 +46,5 @@ export class HospitalService {
 
     return hospital;
   }
+
 }

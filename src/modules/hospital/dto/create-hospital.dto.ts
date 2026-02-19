@@ -7,11 +7,7 @@ import {
   IsEnum, 
   IsJSON 
 } from 'class-validator';
-<<<<<<< HEAD
 import { HospitalType } from '@prisma/client'; // Import enum dari prisma client
-=======
-import { HospitalType } from '@prisma/client';
->>>>>>> develop
 
 export class CreateHospitalDto {
   @IsString()
@@ -40,27 +36,16 @@ export class CreateHospitalDto {
 
   @IsString()
   @IsOptional()
-<<<<<<< HEAD
   ambulance?: string;
 
   @IsOptional() // Karena di Prisma Json? (Optional)
   diseases?: any; // Bisa pakai any atau Record<string, any>
-=======
-  ambulance?: string; // Bisa diisi nomor telepon atau teks bantuan
-
-  @IsOptional()
-  diseases?: any;
->>>>>>> develop
 
   @IsString()
   @IsOptional()
   operationTime?: string;
 
-<<<<<<< HEAD
   @IsEnum(HospitalType) // Memastikan input sesuai enum: HOSPITAL, CLINIC, dll
-=======
-  @IsEnum(HospitalType)
->>>>>>> develop
   @IsOptional()
   type?: HospitalType;
 
