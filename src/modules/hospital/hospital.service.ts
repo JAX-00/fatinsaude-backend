@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
+import { QueryHospitalDto } from './dto/query-hospital.dto';
+import path from 'path';
 
 @Injectable()
 export class HospitalService {
@@ -46,5 +48,28 @@ export class HospitalService {
 
     return hospital;
   }
+
+async filter(districtId?: number, disease?: string) {
+  // buat object where
+  const where: any = {};
+
+  if (districtId) {
+    where.districtId = districtId;
+  }
+
+  if (disease) {
+    // gunakan array_contains karena field diseases Json?
+    // kita masukkan sebagai array supaya Prisma bisa cek apakah array JSON mengandung disease
+    where.diseases = {
+      array_contains: [disease],
+    };
+  }
+
+  return this.prisma.hospital.findMany({
+    where,
+    include: { district: true },
+    orderBy: { name: 'asc' },
+  });
+}
 
 }
