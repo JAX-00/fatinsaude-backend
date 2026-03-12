@@ -2,18 +2,33 @@ import {
   Controller,
   Get,
   Post,
+  Put,
+  Delete,
   Body,
   Param,
   ParseIntPipe,
   Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { HospitalService } from './hospital.service';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
-import { QueryHospitalDto } from './dto/query-hospital.dto';
+import { UpdateHospitalDto } from './dto/update-hospital.dto';
 
 @Controller('hospitals')
 export class HospitalController {
   constructor(private readonly hospitalService: HospitalService) {}
+
+  @Post()
+  create(@Body() dto: CreateHospitalDto) {
+    return this.hospitalService.create(dto);
+  }
+
+  @Get()
+  findAll(@Query('districtId') districtId?: string) { 
+    return this.hospitalService.findAll(
+      districtId ? Number(districtId) : undefined,
+    );
+  }
 
   @Get('filter')
   filter(
@@ -28,15 +43,15 @@ export class HospitalController {
     return this.hospitalService.findOne(id);
   }
 
-  @Get()
-  findAll(@Query('districtId') districtId?: string) {
-    return this.hospitalService.findAll(
-      districtId ? Number(districtId) : undefined,
-    );
+  @Put(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateHospitalDto
+  ) {
+    return this.hospitalService.update(id, dto);
   }
 
-  @Post()
-  create(@Body() dto: CreateHospitalDto) {
-    return this.hospitalService.create(dto);
-  }
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) { return this.hospitalService.remove(id); }
+
 }

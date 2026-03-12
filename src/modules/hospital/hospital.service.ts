@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
-import { QueryHospitalDto } from './dto/query-hospital.dto';
-import path from 'path';
+import { UpdateHospitalDto } from './dto/update-hospital.dto';
 
 @Injectable()
 export class HospitalService {
@@ -49,27 +48,48 @@ export class HospitalService {
     return hospital;
   }
 
-async filter(districtId?: number, disease?: string) {
-  // buat object where
-  const where: any = {};
+  async update(id: number, dto: UpdateHospitalDto) {
+    // cek hospital ada atau tidak
+    const hospital = await this.prisma.hospital.findUnique({
+      where: { id },
+    });
+    if (!hospital) throw new NotFoundException('Hospital not found.');
 
-  if (districtId) {
-    where.districtId = districtId;
+    return this.prisma.hospital.update({
+      where: {id},
+      data: dto,
+      include: {district: true},
+    });
   }
 
-  if (disease) {
-    // gunakan array_contains karena field diseases Json?
-    // kita masukkan sebagai array supaya Prisma bisa cek apakah array JSON mengandung disease
-    where.diseases = {
-      array_contains: [disease],
-    };
+  async remove(id: number){
+    const hospital = await this.prisma.hospital.findUnique({where: {id}});
+    if (!hospital) throw new NotFoundException('Hospital not found.');
+
+    await this.prisma.hospital.delete({where: {id}, });
+
+    return {message: 'Hospital berhasil dihapus.'};
   }
 
-  return this.prisma.hospital.findMany({
-    where,
-    include: { district: true },
-    orderBy: { name: 'asc' },
-  });
-}
+  async filter(districtId?: number, disease?: string) {
+    // buat object where
+    const where: any = {};
+
+    if (districtId) {
+      where.districtId = districtId;
+    }
+
+    if (disease) {
+      where.diseases = {
+        array_contains: [disease],
+      };
+    }
+
+    return this.prisma.hospital.findMany({
+      where,
+      include: { district: true },
+      orderBy: { name: 'asc' },
+    });
+  }
 
 }

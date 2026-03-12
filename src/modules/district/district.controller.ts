@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, Put, Delete } from '@nestjs/common';
 import { DistrictService } from './district.service';
 import { CreateDistrictDto } from './dto/create-district.dto';
+import { UpdateDistrictDto } from './dto/update-district.dto';
+
 
 @Controller('districts')
 export class DistrictController {
@@ -20,5 +22,15 @@ export class DistrictController {
   @Post()
   create(@Body() dto: CreateDistrictDto) {
     return this.districtService.create(dto);
+  }
+
+  @Put(':id')
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateDistrictDto) {
+    return this.districtService.update(id, dto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.districtService.remove(id);
   }
 }
