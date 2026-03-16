@@ -12,6 +12,7 @@ model District {
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  image String? 
   hospitals Hospital[]
 }
 
