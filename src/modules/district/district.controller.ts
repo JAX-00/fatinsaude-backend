@@ -1,4 +1,8 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe, Put, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, Put, Delete, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { Role } from '@prisma/client';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -23,6 +27,8 @@ export class DistrictController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -43,10 +49,15 @@ export class DistrictController {
       dto.image = `/uploads/districts/${file.filename}`;
     }
 
+    if (dto.latitude) dto.latitude = Number(dto.latitude);
+    if (dto.longitude) dto.longitude = Number(dto.longitude);
+
     return this.districtService.create(dto);
   }
   
   @Put(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -67,10 +78,16 @@ export class DistrictController {
     if (file) {
       dto.image = `/uploads/districts/${file.filename}`;
     }
+
+    if (dto.latitude) dto.latitude = Number(dto.latitude);
+    if (dto.longitude) dto.longitude = Number(dto.longitude);
+
     return this.districtService.update(id, dto);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.districtService.remove(id);
   }

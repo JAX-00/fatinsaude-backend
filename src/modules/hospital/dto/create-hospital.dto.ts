@@ -7,7 +7,8 @@ import {
   IsEnum, 
   IsJSON 
 } from 'class-validator';
-import { HospitalType } from '@prisma/client'; // Import enum dari prisma client
+import { Transform } from 'class-transformer';
+import { HospitalType } from '@prisma/client';
 
 export class CreateHospitalDto {
   @IsString()
@@ -18,10 +19,12 @@ export class CreateHospitalDto {
   @IsOptional()
   image?: string;
 
+  @Transform(({ value }) => Number(value))
   @IsNumber()
   @IsNotEmpty()
   latitude: number;
 
+  @Transform(({ value }) => Number(value))
   @IsNumber()
   @IsNotEmpty()
   longitude: number;
@@ -30,6 +33,7 @@ export class CreateHospitalDto {
   @IsOptional()
   phone?: string;
 
+  @Transform(({ value }) => value === 'true' || value === 'Yes' || value === true)
   @IsBoolean()
   @IsOptional()
   emergency?: boolean;
@@ -49,6 +53,7 @@ export class CreateHospitalDto {
   @IsOptional()
   type?: HospitalType;
 
+  @Transform(({ value }) => Number(value))
   @IsNumber()
   @IsNotEmpty()
   districtId: number;

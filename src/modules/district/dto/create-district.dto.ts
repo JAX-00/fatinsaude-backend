@@ -10,4 +10,10 @@ export class CreateDistrictDto{
   @IsOptional()
   @IsString()
   image?: string;
+
+  @IsOptional()
+  latitude?: number;
+
+  @IsOptional()
+  longitude?: number;
 }

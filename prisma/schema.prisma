@@ -12,7 +12,9 @@ model District {
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  image String? 
+  image     String? 
+  latitude  Float?
+  longitude Float?
   hospitals Hospital[]
 }
 
@@ -39,4 +41,31 @@ enum HospitalType {
   CLINIC
   CENTRO
   APOTIK
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Education {
+  id          Int      @id @default(autoincrement())
+  title       String
+  category    String   // e.g., "First Aid", "CPR"
+  description String?
+  content     String?   @db.Text
+  image       String?
+  videoUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
