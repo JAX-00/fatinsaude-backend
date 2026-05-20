@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe, Put, Delete, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, Put, Delete, UseInterceptors, UploadedFile, UseGuards, BadRequestException } from '@nestjs/common';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -39,6 +39,17 @@ export class DistrictController {
           callback(null, uniqueName + extname(file.originalname));
         },
       }),
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+      },
+      fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new BadRequestException('Format imajen la suporta! Favór uza JPEG, PNG, ka WebP.'), false);
+        }
+      },
     }),
   )
   create(
@@ -68,6 +79,17 @@ export class DistrictController {
           cb(null, uniqueName + extname(file.originalname));
         },
       }),
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+      },
+      fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new BadRequestException('Format imajen la suporta! Favór uza JPEG, PNG, ka WebP.'), false);
+        }
+      },
     }),
   )
   update(

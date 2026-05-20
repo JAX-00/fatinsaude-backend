@@ -16,6 +16,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { BadRequestException } from '@nestjs/common';
 import { HospitalService } from './hospital.service';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
 import { UpdateHospitalDto } from './dto/update-hospital.dto';
@@ -40,6 +41,17 @@ export class HospitalController {
           cb(null, `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`);
         },
       }),
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+      },
+      fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new BadRequestException('Format imajen la suporta! Favór uza JPEG, PNG, ka WebP.'), false);
+        }
+      },
     }),
   )
   create(
@@ -103,6 +115,17 @@ export class HospitalController {
           cb(null, `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`);
         },
       }),
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+      },
+      fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new BadRequestException('Format imajen la suporta! Favór uza JPEG, PNG, ka WebP.'), false);
+        }
+      },
     }),
   )
   update(

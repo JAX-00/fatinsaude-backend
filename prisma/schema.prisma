@@ -30,6 +30,7 @@ model Hospital {
   diseases      Json?
   operationTime String?
   type          HospitalType?
+  ownership     Ownership? @default(GOVERNO)
   districtId    Int
   district      District @relation(fields: [districtId], references: [id])
 
@@ -41,6 +42,13 @@ enum HospitalType {
   CLINIC
   CENTRO
   APOTIK
+}
+
+enum Ownership {
+  GOVERNO
+  PRIVADU
+  ONG
+  OTHER
 }
 
 model User {

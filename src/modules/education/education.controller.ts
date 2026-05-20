@@ -10,6 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -38,6 +39,17 @@ export class EducationController {
           cb(null, `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`);
         },
       }),
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+      },
+      fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new BadRequestException('Format imajen la suporta! Favór uza JPEG, PNG, ka WebP.'), false);
+        }
+      },
     }),
   )
   create(
@@ -72,6 +84,17 @@ export class EducationController {
           cb(null, `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`);
         },
       }),
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+      },
+      fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new BadRequestException('Format imajen la suporta! Favór uza JPEG, PNG, ka WebP.'), false);
+        }
+      },
     }),
   )
   update(

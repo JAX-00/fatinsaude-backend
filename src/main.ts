@@ -6,6 +6,7 @@ import { join } from 'path';
 
 // 🔥 tambahkan ini
 import { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -14,8 +15,16 @@ async function bootstrap() {
 
   app.useGlobalFilters(new PrismaExceptionFilter())
   
+  // Keamanan HTTP Headers
+  app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  }));
+
+  // Pengaturan CORS Dinamis
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
   app.enableCors({
-    origin: ['http://localhost:3000'], // frontend
+    origin: [frontendUrl], 
+    credentials: true,
   });
 
   app.useGlobalPipes(

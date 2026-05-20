@@ -53,6 +53,10 @@ export class CreateHospitalDto {
   @IsOptional()
   type?: HospitalType;
 
+  @IsEnum(['GOVERNO', 'PRIVADU', 'ONG', 'OTHER'])
+  @IsOptional()
+  ownership?: any;
+
   @Transform(({ value }) => Number(value))
   @IsNumber()
   @IsNotEmpty()
